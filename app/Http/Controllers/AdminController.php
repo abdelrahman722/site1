@@ -4,9 +4,40 @@ namespace App\Http\Controllers;
 
 use App\Models\admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:admin')->except(['signin', 'checkSignin']);
+    }
+    
+    /**
+     * login page
+     *
+     * @return void
+     */
+    public function signin()
+    {
+        return view('login');
+    }
+
+    public function checkSignin(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        if (Auth::guard('admin')->attempt($request->only('email', 'password'))) {
+            return redirect()->intended('/dashboard');
+        }
+
+        return back()->withInput($request->only('email'));
+    }
+
     /**
      * Display a listing of the resource.
      */

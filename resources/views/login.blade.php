@@ -1,37 +1,88 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+	<title>Login</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>login</title>
-        
-        <!-- bootstrap style -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="{{ url('Login/images/icons/favicon.ico') }}"/>
+	<link rel="stylesheet" type="text/css" href="{{ url('Login/vendor/bootstrap/css/bootstrap.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url('Login/fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url('Login/vendor/animate/animate.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url('Login/vendor/css-hamburgers/hamburgers.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url('Login/vendor/select2/select2.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url('Login/css/util.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url('Login/css/main.css') }}">
+<!--===============================================================================================-->
+</head>
+<body>
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-pic js-tilt" data-tilt>
+					<img src="{{ url('Login/images/img-01.png') }}" alt="IMG">
+				</div>
 
-    </head>
-    <body>
-        <div class="">
-            <form>
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Email address</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1">
-                </div>
-                <div class="mb-3 form-check">
-                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </div>
+				<form class="login100-form validate-form" method="POST" action="{{ route('signin') }}">
+                    @csrf
+					<span class="login100-form-title">
+						Admin Login
+					</span>
 
-        <!-- bootstrap script -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
-    </body>
+					<div class="wrap-input100 validate-input">
+						<input class="input100" type="text" name="email" placeholder="Email" value="{{ old('email') }}" required>
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+						</span>
+					</div>
+
+					<div style="color: red;padding-bottom:10px">
+						@error('email')
+							{{ $message }}
+						@enderror
+					</div>
+					<div class="wrap-input100 validate-input">
+						<input class="input100" type="password" name="password" placeholder="Password" required>
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
+					</div>
+					
+					<div style="color: red">
+						@error('password')
+							{{ $message }}
+						@enderror
+					</div>
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn">
+							Login
+						</button>
+					</div>
+					
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	
+
+	
+<!--===============================================================================================-->	
+	<script src="{{ url('Login/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
+	<script src="{{ url('Login/vendor/bootstrap/js/popper.js') }}"></script>
+	<script src="{{ url('Login/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+	<script src="{{ url('Login/vendor/select2/select2.min.js') }}"></script>
+	<script src="{{ url('Login/vendor/tilt/tilt.jquery.min.js') }}"></script>
+	<script >
+		$('.js-tilt').tilt({
+			scale: 1.1
+		})
+	</script>
+	<script src="{{ url('js/main.js') }}"></script>
+    <!--===============================================================================================-->
+
+</body>
 </html>
