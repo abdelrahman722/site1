@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\admin;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -43,15 +44,9 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $admins = admin::all();
+        $setting = Setting::find(1);
+        return view('admin.index')->with(['admins' => $admins, 'setting' => $setting]);
     }
 
     /**
@@ -59,23 +54,19 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $this->validate($request,[
+            'name' => 'required|max:255|min:4',
+            'email' => 'required|email|max:255|unique:admins',
+            'password' => 'required|confirmed|min:6'
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(admin $admin)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(admin $admin)
-    {
-        //
+        admin::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role' => false
+        ]);
+        return back()->with('success', 'Admin Was Created Successful.');
     }
 
     /**
@@ -83,15 +74,27 @@ class AdminController extends Controller
      */
     public function update(Request $request, admin $admin)
     {
-        //
+        if (auth()->user()->role !== 1) {
+            return back()->with('error', 'Admin can\'t be Edit All Password.');
+        }
+        $this->validate($request,[
+            'password' => 'required|confirmed|min:6'
+        ]);
+        $admin->update(['password' => bcrypt($request->password)]);
+        return back()->with('success', 'Admin Password his Updated Successful.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(admin $admin)
+    public function destroy(Request $request)
     {
-        //
+        $admin = admin::find($request->id);
+        if ($admin->role == 1) {
+            return back()->with('error', 'Super Admin can\'t be Deleted.');
+        }
+        $admin->delete();
+        return back()->with('success', 'Admin Was Deleted Successful.');
     }
     
 }

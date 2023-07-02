@@ -7,59 +7,53 @@ use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
+    public $setting;
+
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+        $this->setting = Setting::find(1);
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Setting $setting)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Setting $setting)
-    {
-        //
+        return view('dashboard')->with('setting', $this->setting);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Setting $setting)
+    public function update(Request $request)
     {
-        //
+        $this->validate($request, [
+            'title' =>'required',
+            'description1' =>'required',
+            'description2' =>'required',
+            'address' =>'required',
+            'email' =>'required',
+            'location' =>'required',
+            'phone1' =>'required',
+            'phone2' =>'required',
+            'phone3' =>'required',
+        ]);
+        if ($request->img) {
+            $img = $this->storeImg($request);
+            $request->offsetSet('img', 'images/site/' . $img);
+        }
+        $setting = Setting::find(1);
+        $setting->update($request->all());
+        
+        return back()->with('success', 'You have successfully update setting.'); 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Setting $setting)
+    public function storeImg($request)
     {
-        //
+        $this->validate($request, ['img' => ['image', 'mimes:jpg,png,jpeg,gif,svg', 'max:8192']]);
+        $imageName = 'SiteImg' . '.' . $request->img->extension();  
+        $request->img->move(public_path('images/site/'), $imageName);
+        return $imageName;
     }
 }
