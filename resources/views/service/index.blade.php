@@ -3,16 +3,14 @@
 @section('content')
     <div class="wrapper">
 
-        <x-model title="Add New Admin" form="addAdmin">
-            <form id="addAdmin" action="{{ route('admin.store') }}" method="POST">
+        <x-model title="Add New Service" form="addService">
+            <form id="addService" action="{{ route('service.store') }}" method="POST">
                 @csrf
-                <x-input name="name" label="Name"></x-input>
+                <x-input name="title" label="Title"></x-input>
                 <!-- /.form-group -->
-                <x-input name="email" label="Email" type="email"></x-input>
+                <x-input name="description" label="Description"></x-input>
                 <!-- /.form-group -->
-                <x-input name="password" label="Password" type="password"></x-input>
-                <!-- /.form-group -->
-                <x-input name="password_confirmation" label="Password Confirmation" type="password"></x-input>
+                <x-input name="icon" label="Icon Class"></x-input>
                 <!-- /.form-group -->
             </form>
         </x-model>
@@ -28,14 +26,13 @@
                         <div class="col-sm-6">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ url('/dashboard') }}">Home</a></li>
-                                <li class="breadcrumb-item active">Admins</li>
+                                <li class="breadcrumb-item active">Service</li>
                             </ol>
                         </div>
                         <div class="col-sm-6">
-                            <button type="button" class="btn btn-primary float-sm-right" data-toggle="modal" data-target="#addAdmin">
+                            <button type="button" class="btn btn-primary float-sm-right" data-toggle="modal" data-target="#addService">
                                 Add New
                             </button>
-                            {{-- <a href="{{ route('admin.create') }}" class="btn btn-primary float-sm-right">Add New</a> --}}
                         </div>
                     </div>
                 </div><!-- /.container-fluid -->
@@ -47,7 +44,7 @@
                 <!-- Default box -->
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">admins</h3>
+                        <h3 class="card-title">Service</h3>
 
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -60,47 +57,62 @@
                             <thead>
                                 <tr>
                                     <th style="width: 3%">#id</th>
-                                    <th style="width: 15%">Name</th>
-                                    <th style="width: 30%">Email</th>
-                                    <th style="width: 20%">role</th>
-                                    <th style="width: 20%">control</th>
+                                    <th style="width: 10%">Title</th>
+                                    <th style="width: 15%">Description</th>
+                                    <th style="width: 10%">Status</th>
+                                    <th style="width: 10%">Icon</th>
+                                    <th style="width: 15%">control</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($admins as $admin)
+                                @foreach ($services as $service)
                                     <tr>
-                                        <td>{{ $admin->id }}</td>
-                                        <td>{{ $admin->name }}</td>
-                                        <td>{{ $admin->email }}</td>
+                                        <td>{{ $service->id }}</td>
+                                        <td>{{ $service->title }}</td>
+                                        <td>{{ $service->description }}</td>
                                         <td>
-                                            @if ($admin->role)
-                                                <span class="badge badge-success">super admin</span>
+                                            @if ($service->status)
+                                                <span class="badge badge-success">On</span>
                                             @else
-                                                <span class="badge badge-primary">admin</span>
+                                                <span class="badge badge-danger">Off</span>
                                             @endif
                                         </td>
+                                        <td><i class="{{ url($service->icon) }}"></i></td>
                                         <td class="project-actions text-center">
-                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#ea{{ $admin->id }}">
+                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#es{{ $service->id }}">
                                                 <i class="fas fa-pencil-alt"></i>Edit
                                             </button>
-                                            <x-model title="Edit {{ $admin->name }} Password" form="ea{{ $admin->id }}">
-                                                <form id="ea{{ $admin->id }}" action="{{ route('admin.update', $admin->id) }}" method="POST" class="text-left">
+                                            <x-model title="Edit {{ $service->title }}" form="es{{ $service->id }}">
+                                                <form id="es{{ $service->id }}" action="{{ route('service.update', $service->id) }}" method="POST" class="text-left">
                                                     @csrf
-                                                    <x-input name="password" label="Password" type="password"></x-input>
+                                                    <x-input name="title" label="Title" value="{{ $service->title }}"></x-input>
                                                     <!-- /.form-group -->
-                                                    <x-input name="password_confirmation" label="Password Confirmation" type="password"></x-input>
+                                                    <x-input name="description" label="Description" value="{{ $service->description }}"></x-input>
+                                                    <!-- /.form-group -->
+                                                    <x-input name="icon" label="Icon Class" value="{{ $service->icon }}"></x-input>
+                                                    <!-- /.form-group -->
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="status" value="1" @if ($service->status == 1) checked @endif>
+                                                            <label class="form-check-label">On</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="status" value="0" @if ($service->status == 0) checked @endif>
+                                                            <label class="form-check-label">Off</label>
+                                                        </div>
+                                                    </div>
                                                     <!-- /.form-group -->
                                                 </form>
                                             </x-model>
 
-                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ra{{ $admin->id }}">
+                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#rs{{ $service->id }}">
                                                 <i class="fas fa-trash"></i>Delete
                                             </button>
-                                            <x-model title="Remove Admin" form="ra{{ $admin->id }}">
-                                                <p>Are You Sure to remove {{ $admin->name }}</p>
-                                                <form id="ra{{ $admin->id }}" action="{{ route('admin.destroy') }}" method="POST">
+                                            <x-model title="Remove Service" form="rs{{ $service->id }}">
+                                                <p>Are You Sure to remove {{ $service->title }}</p>
+                                                <form id="rs{{ $service->id }}" action="{{ route('service.destroy') }}" method="POST">
                                                     @csrf
-                                                    <input type="hidden" name="id" value="{{ $admin->id }}">
+                                                    <input type="hidden" name="id" value="{{ $service->id }}">
                                                     <!-- /.form-group -->
                                                 </form>
                                             </x-model>

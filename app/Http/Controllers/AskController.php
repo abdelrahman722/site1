@@ -3,24 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ask;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class AskController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $asks = Ask::all();
+        $setting = Setting::find(1);
+        return view('ask.index')->with(['asks' => $asks, 'setting' => $setting]);
     }
 
     /**
@@ -28,23 +29,13 @@ class AskController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Ask $ask)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Ask $ask)
-    {
-        //
+        $this->validate($request,[
+            'qu' => 'required|min:4',
+            'an' => 'required|min:4'
+        ]);
+        $request->merge(['status' => true]);
+        Ask::create($request->all());
+        return back()->with('success', 'Ask Was Created Successful.');
     }
 
     /**
@@ -52,14 +43,23 @@ class AskController extends Controller
      */
     public function update(Request $request, Ask $ask)
     {
-        //
+        $this->validate($request,[
+            'qu' => 'required|min:4',
+            'an' => 'required|min:4'
+        ]);
+        $status = (boolean)$request->status;
+        $request->merge(['status' => $status]);
+        $ask->update($request->all());
+        return back()->with('success', 'Ask his Updated Successful.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ask $ask)
+    public function destroy(Request $request)
     {
-        //
+        $ask = Ask::find($request->id);
+        $ask->delete();
+        return back()->with('ask', 'Project Was Deleted Successful.');
     }
 }

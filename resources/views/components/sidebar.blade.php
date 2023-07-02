@@ -21,7 +21,7 @@
                 <img src="{{ url('lte/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                {{-- <a class="d-inline">{{ auth()->user()->name }}</a> --}}
+                <a class="d-inline">{{ auth()->user()->name }}</a>
                 <a class="d-inline" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"title="Log Out">
                     <i class="fas fa-sign-out-alt pl-2"></i>
                 </a>

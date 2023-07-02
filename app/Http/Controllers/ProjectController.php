@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\project;
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use SebastianBergmann\CodeCoverage\Report\Xml\Project as XmlProject;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
 
     /**
      * Display a listing of the resource.
@@ -32,12 +37,10 @@ class ProjectController extends Controller
             'description' => 'required'
         ]);
         $iName = $this->storeimg($request);
-        $request->offsetUnset('img');
-        $request->offsetSet('img', $iName);
-        dd($iName);
-        dd($request->all());
-        $request->offsetSet('status', 'on');
-        project::create($request->all());
+        $requestData = $request->all();
+        $requestData['img'] = $iName;
+        $requestData['status'] = 'on';
+        project::create($requestData);
         return back()->with('success', 'Project Was Created Successful.');
     }
 
@@ -53,11 +56,12 @@ class ProjectController extends Controller
         ]);
         if ($request->img) {
             $imgname = $this->storeImg($request, $project->id);
-            $request->offsetSet('img', $imgname);
         }else{
             $request->offsetUnset('img');
         }
-        $project->update($request->all());
+        $data = $request->all();
+        $data['img'] = $imgname;
+        $project->update($data);
         return back()->with('success', 'project his Updated Successful.');
     }    
 
@@ -67,8 +71,7 @@ class ProjectController extends Controller
             $lastId = Project::latest()->first()->id;
             $id = (int) $lastId + 1;
         }
-
-        $imageName = 'ProjectImg' . $id . '.' . $request->img->extension();  
+        $imageName = 'ProjectImg' . (string)$id . '.' . $request->img->extension();  
         $request->img->move(public_path('images/project/'), $imageName);
         $imageName = 'images/project/' . $imageName;
         return $imageName;
@@ -80,7 +83,15 @@ class ProjectController extends Controller
     public function destroy(Request $request)
     {
         $Project = Project::find($request->id);
+        $this->removeImg($Project);
         $Project->delete();
         return back()->with('success', 'Project Was Deleted Successful.');
+    }
+
+    public function removeImg(Project $project)
+    {
+        $imgPath = public_path($project->img);
+        $imgPath = str_replace('/', '\\', $imgPath);
+        @unlink($imgPath);
     }
 }

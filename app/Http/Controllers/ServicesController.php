@@ -3,24 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Services;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 
 class ServicesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $services = Services::all();
+        $setting = Setting::find(1);
+        return view('service.index')->with(['services' => $services, 'setting' => $setting]);
     }
 
     /**
@@ -28,38 +28,38 @@ class ServicesController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Services $services)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Services $services)
-    {
-        //
+        $this->validate($request,[
+            'title' => 'required|max:255|min:4',
+            'description' => 'required',
+            'icon' => 'required'
+        ]);
+        $request->merge(['status' => true]);
+        Services::create($request->all());
+        return back()->with('success', 'Service Was Created Successful.');
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Services $services)
+    public function update(Request $request, Services $service)
     {
-        //
+        $this->validate($request,[
+            'title' => 'required|max:255|min:4',
+            'description' => 'required'
+        ]);
+        $status = (boolean)$request->status;
+        $request->merge(['status' => $status]);
+        $service->update($request->all());
+        return back()->with('success', 'Service his Updated Successful.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Services $services)
+    public function destroy(Request $request)
     {
-        //
+        $Service = Services::find($request->id);
+        $Service->delete();
+        return back()->with('success', 'Service Was Deleted Successful.');
     }
 }

@@ -120,9 +120,7 @@
                                                 <i class="fas fa-pencil-alt"></i>Edit
                                             </button>
                                             <x-model title="Edit {{ $project->name }}" form="ep{{ $project->id }}">
-                                                <form id="ep{{ $project->id }}"
-                                                    action="{{ route('project.update', $project->id) }}" method="POST"
-                                                    class="text-left">
+                                                <form id="ep{{ $project->id }}" action="{{ route('project.update', $project->id) }}" method="POST" class="text-left"  enctype="multipart/form-data">
                                                     @csrf
                                                     <x-input name="title" label="Title" value="{{ $project->title }}">
                                                     </x-input>

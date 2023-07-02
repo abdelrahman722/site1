@@ -36,10 +36,10 @@ Route::post('/client', [ClientController::class, 'store'])->name('client.store')
 Route::post('/client/destroy', [ClientController::class, 'destroy'])->name('client.destroy');
 Route::post('/client/{client}', [ClientController::class, 'update'])->name('client.update');
 // service
-Route::get('/service', [ServiceController::class, 'index'])->name('service.index');
-Route::post('/service', [ServiceController::class, 'store'])->name('service.store');
-Route::post('/service/destroy', [ServiceController::class, 'destroy'])->name('service.destroy');
-Route::post('/service/{service}', [ServiceController::class, 'update'])->name('service.update');
+Route::get('/service', [ServicesController::class, 'index'])->name('service.index');
+Route::post('/service', [ServicesController::class, 'store'])->name('service.store');
+Route::post('/service/destroy', [ServicesController::class, 'destroy'])->name('service.destroy');
+Route::post('/service/{service}', [ServicesController::class, 'update'])->name('service.update');
 // team
 Route::get('/team', [TeamController::class, 'index'])->name('team.index');
 Route::post('/team', [TeamController::class, 'store'])->name('team.store');
