@@ -35,7 +35,6 @@
                             <button type="button" class="btn btn-primary float-sm-right" data-toggle="modal" data-target="#addAdmin">
                                 Add New
                             </button>
-                            {{-- <a href="{{ route('admin.create') }}" class="btn btn-primary float-sm-right">Add New</a> --}}
                         </div>
                     </div>
                 </div><!-- /.container-fluid -->

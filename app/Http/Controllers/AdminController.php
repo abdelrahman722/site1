@@ -6,12 +6,14 @@ use App\Models\admin;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
 
     public function __construct()
     {
+        $this->middleware('user.type')->only(['store', 'update', 'destroy']);
         $this->middleware('auth:admin')->except(['signin', 'checkSignin']);
     }
     
@@ -48,6 +50,16 @@ class AdminController extends Controller
         $setting = Setting::find(1);
         return view('admin.index')->with(['admins' => $admins, 'setting' => $setting]);
     }
+    
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function profile()
+    {
+        $setting = Setting::find(1);
+        return view('admin.profile')->with(['setting' => $setting]);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -74,14 +86,35 @@ class AdminController extends Controller
      */
     public function update(Request $request, admin $admin)
     {
-        if (auth()->user()->role !== 1) {
-            return back()->with('error', 'Admin can\'t be Edit All Password.');
-        }
         $this->validate($request,[
             'password' => 'required|confirmed|min:6'
         ]);
         $admin->update(['password' => bcrypt($request->password)]);
         return back()->with('success', 'Admin Password his Updated Successful.');
+    }
+
+    
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function profileUpdate(Request $request)
+    {
+        $user = admin::find(auth()->user()->id);
+        $data = array();
+        $valarr = [
+            'name' => 'required|max:255|min:4',
+            'email' => ['required', 'email', Rule::unique('admins')->ignore($user->id)],
+        ];
+        if ($request->password) {
+            $valarr = ['password' => 'required|confirmed|min:6'];
+            $data['password'] = bcrypt($request->password);
+        }
+        $this->validate($request, $valarr);
+        $data['name'] = $request->name;
+        $data['email'] = $request->email;
+        $user->update($data);
+        return back()->with('success', 'Admin Info his Updated Successful.');
     }
 
     /**

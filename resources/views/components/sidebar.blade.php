@@ -22,7 +22,8 @@
             </div>
             <div class="info">
                 <a class="d-inline">{{ auth()->user()->name }}</a>
-                <a class="d-inline" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"title="Log Out">
+                <a class="d-inline" href="{{ route('logout') }}"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"title="Log Out">
                     <i class="fas fa-sign-out-alt pl-2"></i>
                 </a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -34,7 +35,8 @@
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                 <li class="nav-item">
@@ -45,38 +47,53 @@
                         </p>
                     </a>
                 </li>
+                @if (auth()->user()->role)
+                    <li class="nav-item">
+                        <a href="{{ route('admin.index') }}"
+                            class="nav-link @if (strpos(url()->full(), 'admin')) active @endif">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>Admins</p>
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
-                    <a href="{{ route('admin.index') }}" class="nav-link @if (strpos(url()->full(), 'admin')) active @endif">
+                    <a href="{{ route('admin.profile') }}"
+                        class="nav-link @if (strpos(url()->full(), 'profile')) active @endif">
                         <i class="nav-icon fas fa-users"></i>
-                        <p>Admins</p>
+                        <p>Profile</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('project.index') }}" class="nav-link @if (strpos(url()->full(), 'Project')) active @endif">
+                    <a href="{{ route('project.index') }}"
+                        class="nav-link @if (strpos(url()->full(), 'Project')) active @endif">
                         <i class="nav-icon fas fa-warehouse"></i>
                         <p>Projects</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('client.index') }}" class="nav-link @if (strpos(url()->full(), 'client')) active @endif">
+                    <a href="{{ route('client.index') }}"
+                        class="nav-link @if (strpos(url()->full(), 'client')) active @endif">
                         <i class="nav-icon fas fa-user-tie"></i>
                         <p>Clients</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('service.index') }}" class="nav-link @if (strpos(url()->full(), 'service')) active @endif">
+                    <a href="{{ route('service.index') }}"
+                        class="nav-link @if (strpos(url()->full(), 'service')) active @endif">
                         <i class="nav-icon fab fa-servicestack"></i>
                         <p>Services</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('team.index') }}" class="nav-link @if (strpos(url()->full(), 'team')) active @endif">
+                    <a href="{{ route('team.index') }}"
+                        class="nav-link @if (strpos(url()->full(), 'team')) active @endif">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>team</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('ask.index') }}" class="nav-link @if (strpos(url()->full(), 'ask')) active @endif">
+                    <a href="{{ route('ask.index') }}"
+                        class="nav-link @if (strpos(url()->full(), 'ask')) active @endif">
                         <i class="nav-icon fas fa-tasks"></i>
                         <p>Ask</p>
                     </a>

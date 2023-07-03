@@ -22,6 +22,8 @@ Route::get('/dashboard', [SettingController::class, 'index']);
 Route::post('/dashboard', [SettingController::class, 'update'])->name('save.setting');
 // admin
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
+Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile');
+Route::post('/profile', [AdminController::class, 'profileUpdate'])->name('admin.profile.update');
 Route::post('/admin', [AdminController::class, 'store'])->name('admin.store');
 Route::post('/admin/destroy', [AdminController::class, 'destroy'])->name('admin.destroy');
 Route::post('/admin/{admin}', [AdminController::class, 'update'])->name('admin.update');
