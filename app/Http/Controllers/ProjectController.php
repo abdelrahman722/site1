@@ -22,7 +22,7 @@ class ProjectController extends Controller
     {
         $projects = Project::all();
         $setting = Setting::find(1);
-        return view('project.index')->with(['projects' => $projects, 'setting' => $setting]);
+        return view('project.index',)->with(['projects' => $projects, 'setting' => $setting]);
     }
 
     /**
@@ -36,10 +36,15 @@ class ProjectController extends Controller
             'img' => 'image|mimes:jpg,png,jpeg,gif,svg|max:8192',
             'description' => 'required'
         ]);
-        $iName = $this->storeimg($request);
-        $requestData = $request->all();
+        $iName = $this->storeimg($request); // iname name of img + path
+
+        $requestData = $request->all(); // all of filed of request
+
         $requestData['img'] = $iName;
+        
         $requestData['status'] = 'on';
+        dd($requestData);
+
         project::create($requestData);
         return back()->with('success', 'Project Was Created Successful.');
     }
@@ -54,17 +59,24 @@ class ProjectController extends Controller
             'url' => 'required',
             'description' => 'required'
         ]);
+        $data = $request->all();
         if ($request->img) {
             $imgname = $this->storeImg($request, $project->id);
+            $data['img'] = $imgname;
         }else{
             $request->offsetUnset('img');
         }
-        $data = $request->all();
-        $data['img'] = $imgname;
         $project->update($data);
         return back()->with('success', 'project his Updated Successful.');
     }    
-
+    
+    /**
+     * storeImg
+     * store img and return path of img
+     * @param  mixed $request
+     * @param  mixed $id
+     * @return string
+     */
     public function storeImg($request, $id = false)
     {
         if(!$id){
