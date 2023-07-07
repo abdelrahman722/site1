@@ -19,7 +19,8 @@ class ServicesController extends Controller
     public function index()
     {
         $services = Services::all();
-        return view('service.index')->with(['services' => $services]);
+        $setting = Setting::find(1);
+        return view('service.index')->with(['services' => $services, 'setting' => $setting]);
     }
 
     /**

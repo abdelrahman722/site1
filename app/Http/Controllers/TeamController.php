@@ -19,7 +19,8 @@ class TeamController extends Controller
     public function index()
     {
         $team = Team::all();
-        return view('team.index')->with(['team' => $team]);
+        $setting = Setting::find(1);
+        return view('team.index')->with(['team' => $team, 'setting' => $setting]);
     }
 
     /**
@@ -52,13 +53,15 @@ class TeamController extends Controller
             'title' => 'required|max:255|min:4',
             'description' => 'required'
         ]);
-        $data = $request->all();
         if ($request->img) {
             $imgname = $this->storeImg($request, $team->id);
-            $data['img'] = $imgname;
+        }else{
+            $request->offsetUnset('img');
         }
         $status = (boolean)$request->status;
         $request->merge(['status' => $status]);
+        $data = $request->all();
+        $data['img'] = $imgname;
         $team->update($data);
         return back()->with('success', 'Team his Updated Successful.');
     }    

@@ -14,6 +14,7 @@ class HomeController extends Controller
 {
 
     public $projects;
+    public $setting;
     public $asks;
     public $clients;
     public $services;
@@ -27,6 +28,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->projects = Project::all();
+        $this->setting = Setting::find(1);
         $this->asks = Ask::all();
         $this->clients = Client::all();
         $this->services = Services::all();
@@ -40,6 +42,7 @@ class HomeController extends Controller
     {
         return view('welcome')->with([
             'projects' => $this->projects,
+            'setting' => $this->setting,
             'asks' => $this->asks,
             'clients' => $this->clients,
             'services' => $this->services,
@@ -51,6 +54,7 @@ class HomeController extends Controller
     {
         return view('project')->with([
             'project' => $project,
+            'setting' => $this->setting,
             'services' => $this->services,
         ]);
     }
