@@ -21,8 +21,7 @@ class ProjectController extends Controller
     public function index()
     {
         $projects = Project::all();
-        $setting = Setting::find(1);
-        return view('project.index',)->with(['projects' => $projects, 'setting' => $setting]);
+        return view('project.index',)->with(['projects' => $projects]);
     }
 
     /**
@@ -63,8 +62,6 @@ class ProjectController extends Controller
         if ($request->img) {
             $imgname = $this->storeImg($request, $project->id);
             $data['img'] = $imgname;
-        }else{
-            $request->offsetUnset('img');
         }
         $project->update($data);
         return back()->with('success', 'project his Updated Successful.');

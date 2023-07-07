@@ -47,8 +47,7 @@ class AdminController extends Controller
     public function index()
     {
         $admins = admin::all();
-        $setting = Setting::find(1);
-        return view('admin.index')->with(['admins' => $admins, 'setting' => $setting]);
+        return view('admin.index')->with(['admins' => $admins]);
     }
     
 
@@ -57,8 +56,7 @@ class AdminController extends Controller
      */
     public function profile()
     {
-        $setting = Setting::find(1);
-        return view('admin.profile')->with(['setting' => $setting]);
+        return view('admin.profile');
     }
 
     /**

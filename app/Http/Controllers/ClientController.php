@@ -19,8 +19,7 @@ class ClientController extends Controller
     public function index()
     {
         $clients = Client::all();
-        $setting = Setting::find(1);
-        return view('client.index')->with(['clients' => $clients, 'setting' => $setting]);
+        return view('client.index')->with(['clients' => $clients]);
     }
 
     /**
@@ -49,15 +48,13 @@ class ClientController extends Controller
         $this->validate($request,[
             'title' => 'required|max:255|min:4',
         ]);
+        $data = $request->all();
         if ($request->img) {
             $imgname = $this->storeImg($request, $client->id);
-        }else{
-            $request->offsetUnset('img');
+            $data['img'] = $imgname;
         }
         $status = (boolean)$request->status;
         $request->merge(['status' => $status]);
-        $data = $request->all();
-        $data['img'] = $imgname;
         $client->update($data);
         return back()->with('success', 'Client his Updated Successful.');
     }    

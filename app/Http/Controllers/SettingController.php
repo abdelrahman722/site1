@@ -12,7 +12,6 @@ class SettingController extends Controller
     public function __construct()
     {
         $this->middleware('auth:admin');
-        $this->setting = Setting::find(1);
     }
 
     /**
@@ -20,7 +19,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        return view('dashboard')->with('setting', $this->setting);
+        return view('dashboard');
     }
 
     /**
@@ -39,12 +38,14 @@ class SettingController extends Controller
             'phone2' =>'required',
             'phone3' =>'required',
         ]);
+        $data = $request->all();
+
         if ($request->img) {
             $img = $this->storeImg($request);
-            $request->offsetSet('img', 'images/site/' . $img);
+            $data['img'] = 'images/site/' . $img;
         }
         $setting = Setting::find(1);
-        $setting->update($request->all());
+        $setting->update($data);
         
         return back()->with('success', 'You have successfully update setting.'); 
     }
