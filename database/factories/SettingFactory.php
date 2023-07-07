@@ -30,6 +30,7 @@ class SettingFactory extends Factory
             'twitter' => 'twitter.com',
             'linkedin' => 'linkedin.com',
             'skype' => 'skype.com',
+            'img' => 'assets/img/hero-img.png'
         ];
     }
 }

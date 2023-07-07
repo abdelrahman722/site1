@@ -20,8 +20,7 @@ class AskController extends Controller
     public function index()
     {
         $asks = Ask::all();
-        $setting = Setting::find(1);
-        return view('ask.index')->with(['asks' => $asks, 'setting' => $setting]);
+        return view('ask.index')->with('asks', $asks);
     }
 
     /**

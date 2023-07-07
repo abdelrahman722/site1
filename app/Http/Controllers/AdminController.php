@@ -57,8 +57,7 @@ class AdminController extends Controller
      */
     public function profile()
     {
-        $setting = Setting::find(1);
-        return view('admin.profile')->with(['setting' => $setting]);
+        return view('admin.profile');
     }
 
     /**
